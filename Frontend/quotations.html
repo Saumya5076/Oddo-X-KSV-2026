@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quotation Comparison</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+tr.approved {
+    background-color: #d4f8d4 !important;
+}
+
+tr.rejected {
+    background-color: #ffd6d6 !important;
+}
+
+tr.recommended {
+    background-color: #fff6cc !important;
+}
+
+tr {
+    transition: 0.3s ease;
+}
+
+.highlight-box {
+    color: #1f2937;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">VendorBridge</div>
+
+        <ul>
+            
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="vendors.html">Vendors</a></li>
+            <li><a href="rfq.html">RFQs</a></li>
+            <li class="active"><a href="quotations.html">Quotations</a></li>
+            <li><a href="approvals.html">Approvals</a></li>
+            <li><a href="purchase-orders.html">Purchase Orders</a></li>
+            <li><a href="invoices.html">Invoices</a></li>
+            <li><a href="reports.html">Reports</a></li>
+        </ul>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+        <div class="page-header">
+
+            <h1>Quotation Comparison</h1>
+
+            <button class="add-btn" id="compareBtn">
+                Compare Vendors
+            </button>
+
+        </div>
+
+        <!-- AI RECOMMENDATION -->
+        <div class="recommendation-card">
+
+            <h2>AI Recommendation</h2>
+
+            <p>
+                Recommended Vendor:
+                <strong id="recommendedVendor">ABC Technologies</strong>
+            </p>
+
+            <div class="recommendation-grid">
+
+                <div>🏆 Best Price</div>
+                <div>⭐ Highest Rating</div>
+                <div>🚚 Fast Delivery</div>
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Vendor</th>
+                        <th>Quotation Amount</th>
+                        <th>Delivery Time</th>
+                        <th>Vendor Rating</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr>
+                        <td>ABC Technologies</td>
+                        <td class="price">475000</td>
+                        <td>7 Days</td>
+                        <td>4.9</td>
+                        <td><span>Recommended</span></td>
+                        <td>
+                            <button class="approve-btn">Approve</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>XYZ Solutions</td>
+                        <td class="price">510000</td>
+                        <td>12 Days</td>
+                        <td>4.6</td>
+                        <td><span>Under Review</span></td>
+                        <td>
+                            <button class="reject-btn">Reject</button>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>Global Services</td>
+                        <td class="price">540000</td>
+                        <td>10 Days</td>
+                        <td>4.3</td>
+                        <td><span>Under Review</span></td>
+                        <td>
+                            <button class="reject-btn">Reject</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    // APPROVE
+    document.querySelectorAll(".approve-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            let row = this.closest("tr");
+            row.classList.remove("rejected");
+            row.classList.add("approved");
+            row.querySelector("td span").innerText = "Approved";
+        });
+    });
+
+    // REJECT
+    document.querySelectorAll(".reject-btn").forEach(btn => {
+        btn.addEventListener("click", function () {
+            let row = this.closest("tr");
+            row.classList.remove("approved");
+            row.classList.add("rejected");
+            row.querySelector("td span").innerText = "Rejected";
+        });
+    });
+
+    // COMPARE BUTTON LOGIC (🔥 NEW FEATURE)
+    document.getElementById("compareBtn").addEventListener("click", function () {
+
+        let rows = document.querySelectorAll("tbody tr");
+
+        let bestRow = null;
+        let lowestPrice = Infinity;
+        let bestVendor = "";
+
+        // remove previous highlight
+        rows.forEach(r => r.classList.remove("recommended"));
+
+        rows.forEach(row => {
+            let price = parseInt(row.querySelector(".price").innerText);
+
+            if (price < lowestPrice) {
+                lowestPrice = price;
+                bestRow = row;
+                bestVendor = row.cells[0].innerText;
+            }
+        });
+
+        if (bestRow) {
+            bestRow.classList.add("recommended");
+
+            document.getElementById("recommendedVendor").innerText = bestVendor;
+
+            alert("Comparison Completed ✔️ Best Vendor Selected: " + bestVendor);
+        }
+
+    });
+
+});
+</script>
+
+</body>
+</html>

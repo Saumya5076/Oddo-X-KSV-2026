@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Reports & Analytics</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+/* TOAST */
+#toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    display: none;
+    z-index: 1000;
+}
+
+/* CHART FIX (IMPORTANT) */
+.analytics-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.chart-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chart-card canvas {
+    flex: 1;
+    max-height: 260px;
+}
+
+/* Sidebar enhancement */
+.sidebar ul li a {
+    display: block;
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.sidebar ul li a:hover {
+    background: #eee;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">VendorBridge</div>
+
+        <ul>
+
+            
+            <li><a href="index.html">🏠 Home</a></li>
+
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="vendors.html">Vendors</a></li>
+            <li><a href="rfq.html">RFQs</a></li>
+            <li><a href="quotations.html">Quotations</a></li>
+            <li><a href="approvals.html">Approvals</a></li>
+            <li><a href="purchase-orders.html">Purchase Orders</a></li>
+            <li><a href="invoices.html">Invoices</a></li>
+
+            <li class="active"><a href="reports.html">Reports</a></li>
+
+        </ul>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+        <div class="page-header">
+
+            <h1>Reports & Analytics</h1>
+
+            <button class="add-btn" onclick="showToast('Report Exported Successfully 📊')">
+                Export Report
+            </button>
+
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+
+            <div class="kpi-card"><h3>₹12.8 Cr</h3><p>Total Procurement</p></div>
+            <div class="kpi-card"><h3>245</h3><p>Active Vendors</p></div>
+            <div class="kpi-card"><h3>94%</h3><p>Approval Success</p></div>
+            <div class="kpi-card"><h3>91%</h3><p>Vendor Satisfaction</p></div>
+
+        </div>
+
+        <!-- HEALTH -->
+        <div class="health-card">
+            <h2>Procurement Health Index</h2>
+            <div class="health-score">92</div>
+            <p>Excellent Procurement Performance</p>
+        </div>
+
+        <!-- CHART ROW 1 -->
+        <div class="analytics-grid">
+
+            <div class="chart-card">
+                <h2>RFQ Status Overview</h2>
+                <canvas id="rfqChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h2>Invoice Status Overview</h2>
+                <canvas id="invoiceChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- CHART ROW 2 (FIXED VISIBILITY) -->
+        <div class="analytics-grid">
+
+            <div class="chart-card">
+                <h2>Monthly Procurement Trend</h2>
+                <canvas id="trendChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h2>Vendor Performance</h2>
+                <canvas id="vendorChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- TOP VENDORS -->
+        <div class="table-card">
+
+            <h2 class="section-heading">Top Vendors Leaderboard</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Vendor</th>
+                        <th>Rating</th>
+                        <th>Orders</th>
+                        <th>Performance</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr><td>🥇</td><td>ABC Technologies</td><td>4.9 ⭐</td><td>48</td><td>Excellent</td></tr>
+                    <tr><td>🥈</td><td>XYZ Solutions</td><td>4.7 ⭐</td><td>37</td><td>Very Good</td></tr>
+                    <tr><td>🥉</td><td>Global Services</td><td>4.5 ⭐</td><td>31</td><td>Good</td></tr>
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="action-buttons">
+
+            <button class="download-btn" onclick="showToast('PDF Exported 📄')">
+                Export PDF
+            </button>
+
+            <button class="send-btn" onclick="showToast('Excel Exported 📁')">
+                Export Excel
+            </button>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script>
+
+// TOAST
+function showToast(msg) {
+    const toast = document.getElementById("toast");
+    toast.innerText = msg;
+    toast.style.display = "block";
+
+    setTimeout(() => {
+        toast.style.display = "none";
+    }, 2500);
+}
+
+// RFQ CHART
+new Chart(document.getElementById("rfqChart"), {
+    type: "doughnut",
+    data: {
+        labels: ["Accepted", "Pending", "Rejected"],
+        datasets: [{
+            data: [65, 25, 10],
+            backgroundColor: ["#22c55e", "#f59e0b", "#ef4444"]
+        }]
+    }
+});
+
+// INVOICE CHART
+new Chart(document.getElementById("invoiceChart"), {
+    type: "doughnut",
+    data: {
+        labels: ["Paid", "Pending", "Overdue"],
+        datasets: [{
+            data: [70, 20, 10],
+            backgroundColor: ["#3b82f6", "#f59e0b", "#ef4444"]
+        }]
+    }
+});
+
+// TREND CHART
+new Chart(document.getElementById("trendChart"), {
+    type: "bar",
+    data: {
+        labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+        datasets: [{
+            label: "Procurement Trend",
+            data: [2, 3, 4, 3, 5, 6],
+            backgroundColor: "#6366f1"
+        }]
+    }
+});
+
+// VENDOR CHART (FIX FOR LAST EMPTY CHART)
+new Chart(document.getElementById("vendorChart"), {
+    type: "bar",
+    data: {
+        labels: ["ABC", "XYZ", "Global"],
+        datasets: [{
+            label: "Performance Score",
+            data: [95, 87, 80],
+            backgroundColor: "#10b981"
+        }]
+    }
+});
+
+</script>
+
+</body>
+</html>

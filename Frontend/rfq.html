@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RFQ Management</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">VendorBridge</div>
+
+        <ul>
+            
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="vendors.html">Vendors</a></li>
+            <li class="active"><a href="rfq.html">RFQs</a></li>
+            <li><a href="quotations.html">Quotations</a></li>
+            <li><a href="approvals.html">Approvals</a></li>
+            <li><a href="purchase-orders.html">Purchase Orders</a></li>
+            <li><a href="invoices.html">Invoices</a></li>
+            <li><a href="reports.html">Reports</a></li>
+        </ul>
+
+    </aside>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+        <div class="page-header">
+
+            <h1>Create RFQ</h1>
+
+            <button class="add-btn">
+                View RFQs
+            </button>
+
+        </div>
+
+        <!-- FORM -->
+        <div class="form-card">
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label>RFQ Title</label>
+                    <input type="text" id="title" placeholder="Office Laptops Procurement">
+                </div>
+
+                <div class="form-group">
+                    <label>RFQ Number</label>
+                    <input type="text" id="number" placeholder="RFQ-2026-001">
+                </div>
+
+                <div class="form-group">
+                    <label>Product Category</label>
+                    <select id="category">
+                        <option>Hardware</option>
+                        <option>Software</option>
+                        <option>Services</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="number" id="qty" placeholder="100">
+                </div>
+
+                <div class="form-group">
+                    <label>Submission Deadline</label>
+                    <input type="date" id="deadline">
+                </div>
+
+                <div class="form-group">
+                    <label>Budget</label>
+                    <input type="number" id="budget" placeholder="500000">
+                </div>
+
+            </div>
+
+            <div class="form-group">
+                <label>Description</label>
+                <textarea rows="5" id="desc" placeholder="Enter RFQ Details"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Assign Vendors</label>
+                <select id="vendor">
+                    <option>ABC Technologies</option>
+                    <option>XYZ Solutions</option>
+                    <option>Global Services</option>
+                </select>
+            </div>
+
+            <div class="rfq-buttons">
+
+                <button class="draft-btn">
+                    Save Draft
+                </button>
+
+                <button class="send-btn" id="sendBtn">
+                    Send RFQ
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+
+            <h2 class="section-heading">Recent RFQs</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>RFQ ID</th>
+                        <th>Title</th>
+                        <th>Category</th>
+                        <th>Deadline</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody id="rfqTable">
+
+                    <tr>
+                        <td>RFQ-001</td>
+                        <td>Laptop Procurement</td>
+                        <td>Hardware</td>
+                        <td>15 June 2026</td>
+                        <td><span class="status-active">Sent</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>RFQ-002</td>
+                        <td>Software Licenses</td>
+                        <td>Software</td>
+                        <td>20 June 2026</td>
+                        <td><span class="status-pending">Draft</span></td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+let rfqs = JSON.parse(localStorage.getItem("rfqs")) || [];
+
+// Load existing RFQs on page load
+window.onload = function () {
+    const table = document.getElementById("rfqTable");
+
+    rfqs.forEach(rfq => {
+        addRow(rfq, table);
+    });
+};
+
+// Send RFQ button
+document.getElementById("sendBtn").addEventListener("click", function () {
+
+    const rfq = {
+        id: document.getElementById("number").value || "RFQ-" + Math.floor(Math.random() * 1000),
+        title: document.getElementById("title").value,
+        category: document.getElementById("category").value,
+        deadline: document.getElementById("deadline").value,
+        status: "Sent"
+    };
+
+    if (!rfq.title) {
+        alert("Please enter RFQ Title");
+        return;
+    }
+
+    rfqs.push(rfq);
+    localStorage.setItem("rfqs", JSON.stringify(rfqs));
+
+    addRow(rfq, document.getElementById("rfqTable"));
+
+    alert("RFQ Sent Successfully ✔️");
+
+    // optional: reset form
+    document.querySelectorAll("input, textarea").forEach(el => el.value = "");
+});
+
+// function to add row
+function addRow(rfq, table) {
+    let row = table.insertRow();
+
+    row.innerHTML = `
+        <td>${rfq.id}</td>
+        <td>${rfq.title}</td>
+        <td>${rfq.category}</td>
+        <td>${rfq.deadline || "Not Set"}</td>
+        <td><span class="status-active">${rfq.status}</span></td>
+    `;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>VendorBridge Dashboard</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <a href="index.html" class="sidebar-logo">
+            VendorBridge
+        </a>
+
+
+        <ul>
+            <li><a href="index.html">🏠 Home</a></li>
+
+            <li>
+                <a href="index.html">
+                    Home
+                </a>
+            </li>
+
+            <li class="active">
+                <a href="dashboard.html">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="vendors.html">
+                    Vendors
+                </a>
+            </li>
+
+            <li>
+                <a href="rfq.html">
+                    RFQs
+                </a>
+            </li>
+
+            <li>
+                <a href="quotations.html">
+                    Quotations
+                </a>
+            </li>
+
+            <li>
+                <a href="approvals.html">
+                    Approvals
+                </a>
+            </li>
+
+            <li>
+                <a href="purchase-orders.html">
+                    Purchase Orders
+                </a>
+            </li>
+
+            <li>
+                <a href="invoices.html">
+                    Invoices
+                </a>
+            </li>
+
+            <li>
+                <a href="reports.html">
+                    Reports
+                </a>
+            </li>
+
+        </ul>
+
+    </aside>
+
+    <!-- MAIN -->
+
+    <main class="dashboard-main">
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <div>
+
+                <h1>
+                    Procurement Dashboard
+                </h1>
+
+                <p class="welcome-text">
+                    Welcome back, Admin 👋
+                </p>
+
+            </div>
+
+            <div class="profile-card">
+
+                <div class="profile-avatar">
+                    A
+                </div>
+
+                <div>
+
+                    <h4>
+                        Admin User
+                    </h4>
+
+                    <span>
+                        Procurement Manager
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- KPI CARDS -->
+
+        <div class="kpi-grid">
+
+            <div class="kpi-card">
+
+                <h3>245</h3>
+
+                <p>Total Vendors</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>54</h3>
+
+                <p>Active RFQs</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>12</h3>
+
+                <p>Pending Approvals</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>431</h3>
+
+                <p>Invoices Generated</p>
+
+            </div>
+
+        </div>
+
+        <!-- SECOND ROW KPI -->
+
+        <div class="kpi-grid">
+
+            <div class="kpi-card">
+
+                <h3>₹12.8Cr</h3>
+
+                <p>Total Procurement</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>94%</h3>
+
+                <p>Approval Success</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>91%</h3>
+
+                <p>Vendor Satisfaction</p>
+
+            </div>
+
+            <div class="kpi-card">
+
+                <h3>28</h3>
+
+                <p>Open Purchase Orders</p>
+
+            </div>
+
+        </div>
+        <div class="health-card">
+
+    <h2>Procurement Health Index</h2>
+
+    <div class="health-circle">
+
+        92%
+
+    </div>
+
+    <p>
+        Excellent Performance
+    </p>
+
+</div>
+
+        <!-- ANALYTICS -->
+
+       <div class="analytics-grid">
+
+    <div class="chart-card">
+
+        <div class="card-header">
+
+            <h2>Monthly Procurement Spend</h2>
+
+        </div>
+
+        <canvas id="spendChart"></canvas>
+
+    </div>
+
+    <div class="chart-card">
+
+        <div class="card-header">
+
+            <h2>Vendor Performance</h2>
+
+        </div>
+
+        <canvas id="vendorChart"></canvas>
+
+    </div>
+
+</div>
+        <!-- PROCUREMENT STATUS -->
+
+        <div class="table-card">
+
+            <h2 class="section-heading">
+                Procurement Status
+            </h2>
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>ID</th>
+
+                        <th>Department</th>
+
+                        <th>Vendor</th>
+
+                        <th>Amount</th>
+
+                        <th>Status</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    <tr>
+
+                        <td>PR-101</td>
+
+                        <td>IT Department</td>
+
+                        <td>ABC Technologies</td>
+
+                        <td>₹4,75,000</td>
+
+                        <td>
+                            <span class="status-active">
+                                Approved
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>PR-102</td>
+
+                        <td>Finance</td>
+
+                        <td>XYZ Solutions</td>
+
+                        <td>₹2,80,000</td>
+
+                        <td>
+                            <span class="status-pending">
+                                Pending
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    <tr>
+
+                        <td>PR-103</td>
+
+                        <td>Operations</td>
+
+                        <td>Global Services</td>
+
+                        <td>₹1,25,000</td>
+
+                        <td>
+                            <span class="status-active">
+                                Approved
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- RECENT ACTIVITIES -->
+
+        <div class="activity-section">
+
+            <h2>
+                Recent Activities
+            </h2>
+
+            <div class="activity-card">
+
+                <span>📄</span>
+
+                RFQ #102 Created
+
+            </div>
+
+            <div class="activity-card">
+
+                <span>🏢</span>
+
+                Vendor ABC Submitted Quotation
+
+            </div>
+
+            <div class="activity-card">
+
+                <span>🛒</span>
+
+                Purchase Order Generated
+
+            </div>
+
+            <div class="activity-card">
+
+                <span>💰</span>
+
+                Invoice INV-2026-001 Created
+
+            </div>
+
+            <div class="activity-card">
+
+                <span>⏳</span>
+
+                Approval Request Pending
+
+            </div>
+
+        </div>
+
+    </main>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="js/dashboard-charts.js"></script>
+<script src="js/main.js"></script>
+<script src="js/main.js"></script>
+
+</body>
+
+</html>
