@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Approval Workflow</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+tr {
+    transition: 0.3s ease;
+}
+
+/* toast undo bar */
+#toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #111;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 8px;
+    display: none;
+    gap: 15px;
+    align-items: center;
+    font-size: 14px;
+}
+
+#toast button {
+    background: #4ade80;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="dashboard-container">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">VendorBridge</div>
+
+        <ul>
+            
+            <li><a href="index.html">🏠 Home</a></li>
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="vendors.html">Vendors</a></li>
+            <li><a href="rfq.html">RFQs</a></li>
+            <li><a href="quotations.html">Quotations</a></li>
+            <li class="active"><a href="approvals.html">Approvals</a></li>
+            <li><a href="purchase-orders.html">Purchase Orders</a></li>
+            <li><a href="invoices.html">Invoices</a></li>
+            <li><a href="reports.html">Reports</a></li>
+        </ul>
+
+    </aside>
+
+    <main class="dashboard-main">
+
+        <div class="page-header">
+
+            <h1>Approval Workflow</h1>
+
+            <button class="add-btn" id="generateBtn">
+                Pending Requests
+            </button>
+
+        </div>
+
+        <!-- KPI -->
+        <div class="kpi-grid">
+
+            <div class="kpi-card"><h3>18</h3><p>Pending Approvals</p></div>
+            <div class="kpi-card"><h3>126</h3><p>Approved</p></div>
+            <div class="kpi-card"><h3>7</h3><p>Rejected</p></div>
+            <div class="kpi-card"><h3>94%</h3><p>Approval Rate</p></div>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+
+            <h2 class="section-heading">Approval Requests</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>RFQ</th>
+                        <th>Vendor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="approvalTable">
+                    <!-- generated dynamically -->
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+    <!-- MAIN -->
+    <main class="dashboard-main">
+
+        <div class="page-header">
+
+            <h1>Approval Workflow</h1>
+
+            <button class="add-btn" id="generateBtn">
+                Pending Requests
+            </button>
+
+        </div>
+
+        <!-- TABLE -->
+        <div class="table-card">
+
+            <h2 class="section-heading">Approval Requests</h2>
+
+            <table>
+
+                <thead>
+                    <tr>
+                        <th>Request ID</th>
+                        <th>RFQ</th>
+                        <th>Vendor</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody id="approvalTable">
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
+
+<!-- TOAST (UNDO UI) -->
+<div id="toast">
+    <span id="toastText"></span>
+    <button id="undoBtn">UNDO</button>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const rfqs = [
+        "Laptop Procurement",
+        "Software Licenses",
+        "Office Furniture",
+        "Cloud Services",
+        "Networking Equipment"
+    ];
+
+    const vendors = [
+        "ABC Technologies",
+        "XYZ Solutions",
+        "Global Services",
+        "TechNova",
+        "NetSecure"
+    ];
+
+    const table = document.getElementById("approvalTable");
+
+    let lastDeleted = null;
+
+    // GENERATE REQUESTS
+    function generateRequests() {
+
+        table.innerHTML = "";
+
+        let count = Math.floor(Math.random() * 2) + 4;
+
+        for (let i = 0; i < count; i++) {
+
+            let row = createRow();
+
+            table.appendChild(row);
+        }
+    }
+
+    function createRow() {
+
+        let tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>APR-${Math.floor(100 + Math.random() * 900)}</td>
+            <td>${rfqs[Math.floor(Math.random() * rfqs.length)]}</td>
+            <td>${vendors[Math.floor(Math.random() * vendors.length)]}</td>
+            <td>₹${Math.floor(1 + Math.random() * 5)},00,000</td>
+            <td><span class="status-pending">Pending</span></td>
+            <td>
+                <button class="approve-btn">Approve</button>
+                <button class="reject-btn">Reject</button>
+            </td>
+        `;
+
+        // APPROVE
+        tr.querySelector(".approve-btn").addEventListener("click", function () {
+            removeWithUndo(tr, "Approved");
+        });
+
+        // REJECT
+        tr.querySelector(".reject-btn").addEventListener("click", function () {
+            removeWithUndo(tr, "Rejected");
+        });
+
+        return tr;
+    }
+
+    // REMOVE + UNDO SYSTEM
+    function removeWithUndo(row, status) {
+
+        lastDeleted = {
+            row: row,
+            status: status
+        };
+
+        row.remove();
+
+        showToast(status + " request processed");
+    }
+
+    // TOAST
+    function showToast(message) {
+
+        let toast = document.getElementById("toast");
+        let text = document.getElementById("toastText");
+
+        text.innerText = message + " — Undo available";
+        toast.style.display = "flex";
+
+        // auto hide after 5 sec
+        setTimeout(() => {
+            toast.style.display = "none";
+            lastDeleted = null;
+        }, 5000);
+    }
+
+    // UNDO BUTTON
+    document.getElementById("undoBtn").addEventListener("click", function () {
+
+        if (lastDeleted) {
+            table.appendChild(lastDeleted.row);
+            lastDeleted = null;
+            document.getElementById("toast").style.display = "none";
+        }
+
+    });
+
+    document.getElementById("generateBtn").addEventListener("click", generateRequests);
+
+});
+</script>
+
+</body>
+</html>
